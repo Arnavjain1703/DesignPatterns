@@ -1,0 +1,43 @@
+class Main {
+    public static void main(String[] args) {
+        LogisticsApp Logistics = new SeaLogistics();
+        Logistics.delivery();
+    }
+}
+
+abstract class LogisticsApp {
+    
+    protected abstract Vehicle createVehicle();
+
+    void delivery() {
+        createVehicle().deliver();
+    }
+}
+
+class RoadLogistics extends LogisticsApp {
+    protected Vehicle createVehicle(){
+        return new Truck();
+    }
+}
+
+class SeaLogistics extends LogisticsApp {
+    protected Vehicle createVehicle(){
+        return new Ship();
+    }
+}
+
+interface Vehicle {
+    public void deliver();
+}
+
+class Truck implements Vehicle {
+    public void deliver() {
+        System.out.println("Truck Delivery Completed Successfully");
+    }
+}
+
+class Ship implements Vehicle {
+    public void deliver() {
+        System.out.println("Ship Delivery Completed Successfully");
+    }
+}
