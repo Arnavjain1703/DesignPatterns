@@ -1,0 +1,46 @@
+class Main {
+    public static void main(String[] args) {
+        LogisticsApp logisticsApp = new LogisticsApp();
+        logisticsApp.delivery("LAND");
+    }
+}
+
+class LogisticsApp {
+
+    void delivery(String transportationType) {
+        VehicleFactory vehicleFactory = new VehicleFactory();
+        Vehicle vehicle = vehicleFactory.getVehicle(transportationType);
+        vehicle.deliver();
+    }
+}
+
+class VehicleFactory {
+
+    Vehicle getVehicle(String transportationType) {
+        if (transportationType.equalsIgnoreCase("LAND")) {
+            return new Truck();
+        } 
+        else if (transportationType.equalsIgnoreCase("SEA")) {
+            return new Ship();
+        } 
+        else {
+            throw new IllegalArgumentException("Invalid transportationType type");
+        }
+    }
+}
+
+interface Vehicle {
+    public void deliver();
+}
+
+class Truck implements Vehicle {
+    public void deliver() {
+        System.out.println("Truck Delivery Completed Successfully");
+    }
+}
+
+class Ship implements Vehicle {
+    public void deliver() {
+        System.out.println("Ship Delivery Completed Successfully");
+    }
+}
