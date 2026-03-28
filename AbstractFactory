@@ -1,0 +1,185 @@
+class Main {
+    public static void main(String[] args) {
+
+        // Using Abstract Factory
+        FurnitureFactory factory = new ModernFurnitureFactory();
+
+        Chair chair = factory.createChair();
+        Sofa sofa = factory.createSofa();
+        Table table = factory.createTable();
+
+        chair.hasLegs();
+        chair.sitOn();
+
+        sofa.hasCushion();
+        sofa.sitOn();
+
+        table.hasLegs();
+        table.placeItems();
+    }
+}
+
+// ================== ABSTRACT FACTORY ==================
+
+interface FurnitureFactory {
+    Chair createChair();
+    Sofa createSofa();
+    Table createTable();
+}
+
+// ================== PRODUCT INTERFACES ==================
+
+interface Table {
+    void hasLegs();
+    void placeItems();
+}
+
+interface Chair {
+    void hasLegs();
+    void sitOn();
+}
+
+interface Sofa {
+    void hasCushion();
+    void sitOn();
+}
+
+// ================== TABLE IMPLEMENTATIONS ==================
+
+class ModernTable implements Table {
+    public void hasLegs() {
+        System.out.println("Modern Table has minimal legs");
+    }
+
+    public void placeItems() {
+        System.out.println("Placing items on Modern Table");
+    }
+}
+
+class VictorianTable implements Table {
+    public void hasLegs() {
+        System.out.println("Victorian Table has carved legs");
+    }
+
+    public void placeItems() {
+        System.out.println("Placing items on Victorian Table");
+    }
+}
+
+class ArtDecoTable implements Table {
+    public void hasLegs() {
+        System.out.println("Art Deco Table has geometric legs");
+    }
+
+    public void placeItems() {
+        System.out.println("Placing items on Art Deco Table");
+    }
+}
+
+// ================== SOFA IMPLEMENTATIONS ==================
+
+class ModernSofa implements Sofa {
+    public void hasCushion() {
+        System.out.println("Modern Sofa has soft cushions");
+    }
+
+    public void sitOn() {
+        System.out.println("Sitting on Modern Sofa");
+    }
+}
+
+class VictorianSofa implements Sofa {
+    public void hasCushion() {
+        System.out.println("Victorian Sofa has premium cushions");
+    }
+
+    public void sitOn() {
+        System.out.println("Sitting on Victorian Sofa");
+    }
+}
+
+class ArtDecoSofa implements Sofa {
+    public void hasCushion() {
+        System.out.println("Art Deco Sofa has stylish cushions");
+    }
+
+    public void sitOn() {
+        System.out.println("Sitting on Art Deco Sofa");
+    }
+}
+
+// ================== CHAIR IMPLEMENTATIONS ==================
+
+class ModernChair implements Chair {
+    public void hasLegs() {
+        System.out.println("Modern Chair has sleek legs");
+    }
+
+    public void sitOn() {
+        System.out.println("Sitting on Modern Chair");
+    }
+}
+
+class VictorianChair implements Chair {
+    public void hasLegs() {
+        System.out.println("Victorian Chair has curved legs");
+    }
+
+    public void sitOn() {
+        System.out.println("Sitting on Victorian Chair");
+    }
+}
+
+class ArtDecoChair implements Chair {
+    public void hasLegs() {
+        System.out.println("Art Deco Chair has stylish legs");
+    }
+
+    public void sitOn() {
+        System.out.println("Sitting on Art Deco Chair");
+    }
+}
+
+// ================== FACTORY IMPLEMENTATIONS ==================
+
+class ModernFurnitureFactory implements FurnitureFactory {
+    public Chair createChair() {
+        return new ModernChair();
+    }
+
+    public Sofa createSofa() {
+        return new ModernSofa();
+    }
+
+    public Table createTable() {
+        return new ModernTable();
+    }
+}
+
+class VictorianFurnitureFactory implements FurnitureFactory {
+    public Chair createChair() {
+        return new VictorianChair();
+    }
+
+    public Sofa createSofa() {
+        return new VictorianSofa();
+    }
+
+    public Table createTable() {
+        return new VictorianTable();
+    }
+}
+
+class ArtDecoFurnitureFactory implements FurnitureFactory {
+    public Chair createChair() {
+        return new ArtDecoChair();
+    }
+
+    public Sofa createSofa() {
+        return new ArtDecoSofa();
+    }
+
+    public Table createTable() {
+        return new ArtDecoTable();
+    }
+}
