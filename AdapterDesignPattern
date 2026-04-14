@@ -1,0 +1,110 @@
+// Online Java Compiler
+// Adapter + Factory Pattern Example
+
+class Main {
+    public static void main(String[] args) {
+
+        PaymentProcessor processor = new PaymentProcessor();
+
+        // Test Razorpay
+        processor.pay(500f, "RAZORPAY");
+
+        // Test Stripe
+        processor.pay(500f, "STRIPE");
+    }
+}
+
+// 🔧 Client (Business Layer)
+class PaymentProcessor {
+
+    private PaymentFactory paymentFactory = new PaymentFactory();
+
+    public void pay(Float price, String type) {
+
+        PaymentMethod paymentMethod = paymentFactory.getPaymentMethod(type);
+
+        if (paymentMethod == null) {
+            System.out.println("❌ Invalid Payment Type");
+            return;
+        }
+
+        paymentMethod.pay(price);
+    }
+}
+
+// 🏭 Factory (Creates appropriate Adapter)
+class PaymentFactory {
+
+    public PaymentMethod getPaymentMethod(String type) {
+
+        if (type.equalsIgnoreCase("RAZORPAY")) {
+            return new RazorPayAdapter(new RazorPay());
+        } 
+        else if (type.equalsIgnoreCase("STRIPE")) {
+            return new StripeAdapter(new Stripe());
+        }
+
+        return null;
+    }
+}
+
+// 🎯 Target Interface
+interface PaymentMethod {
+    void pay(Float price);
+}
+
+// 🔄 Adapter - Razorpay
+class RazorPayAdapter implements PaymentMethod {
+
+    private RazorPay razorPay;
+
+    public RazorPayAdapter(RazorPay razorPay) {
+        this.razorPay = razorPay;
+    }
+
+    @Override
+    public void pay(Float price) {
+
+        // Convert rupees → paise
+        int amountInPaise = (int)(price * 100);
+
+        System.out.println("➡️ Using Razorpay Adapter");
+        razorPay.makePayment(amountInPaise);
+    }
+}
+
+// 🔄 Adapter - Stripe
+class StripeAdapter implements PaymentMethod {
+
+    private Stripe stripe;
+
+    public StripeAdapter(Stripe stripe) {
+        this.stripe = stripe;
+    }
+
+    @Override
+    public void pay(Float price) {
+
+        // Convert rupees → dollars
+        double amountInDollars = price / 83.0;
+
+        System.out.println("➡️ Using Stripe Adapter");
+        stripe.charge(amountInDollars);
+    }
+}
+
+// 🧩 Adaptee - Razorpay SDK
+class RazorPay {
+
+    public void makePayment(int amount) {
+        System.out.println("✅ Paying " + amount + " paise via Razorpay");
+    }
+}
+
+// 🧩 Adaptee - Stripe SDK
+class Stripe {
+
+    public void charge(double fee) {
+        System.out.println("✅ Paying $" + fee + " via Stripe");
+    }
+}
