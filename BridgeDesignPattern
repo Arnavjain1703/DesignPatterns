@@ -1,0 +1,94 @@
+// ===== Implementation (HOW storage works) =====
+interface Storage {
+    void upload(String fileName, String content);
+}
+
+class S3Storage implements Storage {
+    @Override
+    public void upload(String fileName, String content) {
+        System.out.println("Uploading " + fileName + " to AWS S3");
+    }
+}
+
+class GCSStorage implements Storage {
+    @Override
+    public void upload(String fileName, String content) {
+        System.out.println("Uploading " + fileName + " to Google Cloud Storage");
+    }
+}
+
+class LocalStorage implements Storage {
+    @Override
+    public void upload(String fileName, String content) {
+        System.out.println("Saving " + fileName + " to local disk");
+    }
+}
+
+
+// ===== Abstraction =====
+abstract class Fule {   // renamed from MyFile → Fule
+    protected Storage storage;
+
+    public Fule(Storage storage) {
+        this.storage = storage;
+    }
+
+    public abstract void processAndUpload(String content);
+}
+
+
+// ===== Refined Abstractions =====
+class ImageFile extends Fule {
+    public ImageFile(Storage storage) {
+        super(storage);
+    }
+
+    @Override
+    public void processAndUpload(String content) {
+        System.out.println("Processing image (compression, resizing)");
+        storage.upload("image.png", content);
+    }
+}
+
+class VideoFile extends Fule {
+    public VideoFile(Storage storage) {
+        super(storage);
+    }
+
+    @Override
+    public void processAndUpload(String content) {
+        System.out.println("Processing video (encoding)");
+        storage.upload("video.mp4", content);
+    }
+}
+
+class DocumentFile extends Fule {
+    public DocumentFile(Storage storage) {
+        super(storage);
+    }
+
+    @Override
+    public void processAndUpload(String content) {
+        System.out.println("Processing document (formatting)");
+        storage.upload("doc.txt", content);
+    }
+}
+
+
+// ===== Main =====
+public class Main {
+    public static void main(String[] args) {
+
+        Storage s3 = new S3Storage();
+        Storage gcs = new GCSStorage();
+
+        Fule image = new ImageFile(s3);
+        image.processAndUpload("image data");
+
+        Fule video = new VideoFile(gcs);
+        video.processAndUpload("video data");
+
+        Fule doc = new DocumentFile(s3);
+        doc.processAndUpload("document data");
+    }
+}
